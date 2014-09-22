@@ -48,19 +48,19 @@ public class SecureSystem {
 				if (newInstruction.getInstructionCommand().equalsIgnoreCase("BadInstruction")) {
 					System.out.print("Bad Instruction \n");
 					System.out.print("");
-					rm.printState();
+					// rm.printState();
 				}
 
 				/* WRITE command */
 				// System.out.println("Instruction command: " + newInstruction.getInstructionCommand());
 				 if (newInstruction.isWriteInstruction()){
-				 	sys.getReferenceMonitor().executeWrite(newInstruction);
-				 	rm.printState();
+				 	rm.executeWrite(newInstruction);
+				 	// rm.printState();
 				 }
 
 				 if (newInstruction.isReadInstruction()){
-				 	sys.getReferenceMonitor().executeRead(newInstruction);
-				 	rm.printState();
+				 	rm.executeRead(newInstruction);
+				 	// rm.printState();
 				 }
 
 				fileLine = insBuffer.readLine();
