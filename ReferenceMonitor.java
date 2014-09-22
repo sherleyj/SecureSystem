@@ -13,7 +13,7 @@ public class ReferenceMonitor {
 	Map<String, SecureSubject> subjectNameMap = new HashMap<String, SecureSubject>();
 
 	Map<SecureObject, SecurityLevel> objectMap = new HashMap<SecureObject, SecurityLevel>();
-		Map<String, SecureObject> objectNameMap = new HashMap<String, SecureObject>();
+	Map<String, SecureObject> objectNameMap = new HashMap<String, SecureObject>();
 
 
 	private ReferenceMonitor ()
@@ -74,7 +74,7 @@ public class ReferenceMonitor {
 		System.out.println("LObj has value: " + _rm.getObject("LObj").getValue());
 		System.out.println("HObj has value: " + _rm.getObject("HObj").getValue()); 
 		System.out.println("Lyle has recently read: " + _rm.getSubject("Lyle").getTemp());
-		System.out.println("Hal has recently read: " + _rm.getSubject("Hal").getTemp());
+		System.out.println("Hal has recently read: " + _rm.getSubject("Hal").getTemp());	
 		System.out.println("");
 		
 	}
@@ -95,17 +95,11 @@ public class ReferenceMonitor {
 
 		int value = newInstruction.getInstructionValue();
 		ObjectManager objMng = new ObjectManager(obj);
+
 		System.out.println(subjName + " writes value " + value + " to " + objName);
-		// System.out.println("Obj label: " + objLabel + ", subj level: " + subjLabel);
-		_rm.printState();
 		if (objLabel.compareTo(subjLabel) >= 0) {
-			System.out.println("writing");
-			//ObjectManager objMng = new ObjectManager(obj);
-			// System.out.println(objMng.object.getName());
-			_rm.printState();
 			return objMng.writeObj(value);
 		}
-		System.out.println("didn't write");
 		return 0;
 	}
 
@@ -123,19 +117,14 @@ public class ReferenceMonitor {
 		SecureObject obj = getObject (objName);
 		SecurityLevel objLabel = _rm.getObjectLabel(obj);
 
-		_rm.printState();
 		System.out.println(subjName + " reads " + objName);
 		if (objLabel.compareTo(subjLabel) <= 0 ) {
 			ObjectManager objMng = new ObjectManager(obj);
-			// System.out.println(objMng.object.getName());
-			System.out.println("reading");
 			int value = objMng.readObj();
 			subj.updateTemp(value);
-			_rm.printState();
 			return value;
 		}
 		else {
-			_rm.printState();
 			subj.updateTemp(0);
 		}
 		

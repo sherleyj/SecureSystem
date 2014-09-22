@@ -1,0 +1,8 @@
+write Hal HObj 10
+write Hal LObj 20
+read Hal LObj
+write Lyle LObj 30
+write Lyle HObj 40
+read Lyle LObj
+read Hal HObj
+read Lyle HObj
