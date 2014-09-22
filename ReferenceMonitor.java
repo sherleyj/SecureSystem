@@ -30,13 +30,13 @@ public class ReferenceMonitor {
 	public void addSubject (SecureSubject subject, SecurityLevel level){
 		// SecureSubject subject = new SecureSubject(name);
 		subjectMap.put(subject, level);
-		subjectNameMap.put(subject.getName(), subject);
+		subjectNameMap.put(subject.getName().toLowerCase(), subject);
 	}
 
 	public void addObject (SecureObject object, SecurityLevel level){
 		// SecureSubject subject = new SecureSubject(name);
 		objectMap.put(object, level);
-		objectNameMap.put(object.getName(), object);
+		objectNameMap.put(object.getName().toLowerCase(), object);
 	}
 
 	public void createObject (String name, SecurityLevel level) {
@@ -53,25 +53,29 @@ public class ReferenceMonitor {
 	}
 
 	public SecurityLevel getSubjectLabel (String name){
-		return subjectMap.get(getSubject(name));
+		return subjectMap.get(getSubject(name.toLowerCase()));
 	}
 
 	public SecurityLevel getObjectLabel (String name){
-		return objectMap.get(getObject(name));
+		return objectMap.get(getObject(name.toLowerCase()));
 	}
 
 	public SecureSubject getSubject (String name) {
-		return subjectNameMap.get(name);
+		return subjectNameMap.get(name.toLowerCase());
 	}
 
 	public SecureObject getObject (String name) {
-		return objectNameMap.get(name);
+		return objectNameMap.get(name.toLowerCase());
 	}
 
 
 	public void printState(){
-		String objectL = "LObj";
 		System.out.println( "The current system state is: ");
+		System.out.println( "LObj has value: " + _rm.getObject("LObj").getValue());
+		System.out.println("HObj has value: " + _rm.getObject("HObj").getValue()); 
+		System.out.println("Lyle has recently read: " + _rm.getSubject("Lyle").getTemp());
+		System.out.println("Hal has recently read: " + _rm.getSubject("Hal").getTemp());
+		System.out.println("");
 		
 	}
 
@@ -79,36 +83,44 @@ public class ReferenceMonitor {
 	// check if legal write.  
 	// If legal, pass to ObjectManager. Return value of the write.
 	// otherwise return 0.
-	public int rmWrite (Instruction newInstruction){
+	public int executeWrite (Instruction newInstruction){
 		SecureSubject subj = getSubject (newInstruction.getInstructionSubjName());
 		SecurityLevel subjLabel = _rm.getSubjectLabel(subj);
 
 		SecureObject obj = getObject (newInstruction.getInstructionObjName());
 		SecurityLevel objLabel = _rm.getObjectLabel(obj);
 
-		if (objLabel == subjLabel) {
+		int value = newInstruction.getInstructionValue();
+
+		if (objLabel.compareTo(subjLabel) >= 0) {
 			ObjectManager objMng = new ObjectManager(obj);
-			return objMng.readObj();
+			System.out.println(objMng.object.getName());
+			return objMng.writeObj(value);
 		}
 		
 		return 0;
-	
 	}
 
 	// subject read Object
 	// check if legal read. 
 	// If legal, pass to ObjectManager. Return value of the read.
 	// otherwise return 0.
-	public int rmRead (Instruction newInstruction){
+	public int executeRead (Instruction newInstruction){
 		SecureSubject subj = getSubject (newInstruction.getInstructionSubjName());
 		SecurityLevel subjLabel = _rm.getSubjectLabel(subj);
 
 		SecureObject obj = getObject (newInstruction.getInstructionObjName());
 		SecurityLevel objLabel = _rm.getObjectLabel(obj);
 
-		if (objLabel == subjLabel) {
+		if (objLabel.compareTo(subjLabel) <= 0 ) {
+			// System.out.println();
+
 			ObjectManager objMng = new ObjectManager(obj);
-			return objMng.writeObj( newInstruction.getInstructionValue());
+			System.out.println(objMng.object.getName());
+
+			int value = objMng.readObj();
+			subj.updateTemp(value);
+			return value;
 		}
 		
 		return 0;		

@@ -13,14 +13,13 @@ public class SecureSubject {
 		return this.name;
 	}
 
-	public int read() {
-		this.temp = 0;
-		// call rm read. read = value returned
-		return 0;
+	public int getTemp(){
+		return this.temp;
 	}
 
-	public int write() {
-		return 0;
-		// call rm write
+	public void updateTemp(int value) {
+		this.temp = value;
+		// call rm read. read = value returned
 	}
+
 } // class SecureSubject
