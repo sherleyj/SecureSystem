@@ -35,8 +35,8 @@ public class SecureSystem {
 			insStream = new FileInputStream (inputFile.getAbsolutePath());
 			insBuffer = new BufferedReader (new InputStreamReader(insStream));
 
-			// System.out.println("reading from file: " + inputFile.getName());
-			
+			System.out.println("reading from file: " + inputFile.getName());
+			System.out.println("");
 			String fileLine = insBuffer.readLine();
 			while (fileLine != null) {
 				Instruction newInstruction = Instruction.parseInstruction(fileLine);

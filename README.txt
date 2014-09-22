@@ -34,6 +34,23 @@ you need to use "java SecureSystem instructionList"
 
 I finished all of the assignment.  
 
+[Input of Test1]
+write Hal HObj 
+read Hal 
+write Lyle LObj 10
+read Hal LObj 
+write Lyle HObj 20
+write Hal LObj 200
+read Hal HObj
+read Lyle LObj
+read Lyle HObj
+foo Lyle LObj
+Hi Lyle,This is Hal
+The missile launch code is 1234567
+
+[Ouput of Test 1]
+reading from file: instructionList
+
 Bad Instruction 
 The current system state is: 
 LObj has value: 0
