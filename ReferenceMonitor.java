@@ -84,17 +84,21 @@ public class ReferenceMonitor {
 	// If legal, pass to ObjectManager. Return value of the write.
 	// otherwise return 0.
 	public int executeWrite (Instruction newInstruction){
-		SecureSubject subj = getSubject (newInstruction.getInstructionSubjName());
+		String subjName = newInstruction.getInstructionSubjName();
+		String objName = newInstruction.getInstructionObjName();
+
+		SecureSubject subj = getSubject (subjName);
 		SecurityLevel subjLabel = _rm.getSubjectLabel(subj);
 
-		SecureObject obj = getObject (newInstruction.getInstructionObjName());
+		SecureObject obj = getObject (objName);
 		SecurityLevel objLabel = _rm.getObjectLabel(obj);
 
 		int value = newInstruction.getInstructionValue();
 
+		System.out.println(subjName + " writes value " + value + " to " + objName);
 		if (objLabel.compareTo(subjLabel) >= 0) {
 			ObjectManager objMng = new ObjectManager(obj);
-			System.out.println(objMng.object.getName());
+			// System.out.println(objMng.object.getName());
 			return objMng.writeObj(value);
 		}
 		
@@ -106,21 +110,26 @@ public class ReferenceMonitor {
 	// If legal, pass to ObjectManager. Return value of the read.
 	// otherwise return 0.
 	public int executeRead (Instruction newInstruction){
-		SecureSubject subj = getSubject (newInstruction.getInstructionSubjName());
+		String subjName = newInstruction.getInstructionSubjName();
+		String objName = newInstruction.getInstructionObjName();
+
+		SecureSubject subj = getSubject (subjName);
 		SecurityLevel subjLabel = _rm.getSubjectLabel(subj);
 
-		SecureObject obj = getObject (newInstruction.getInstructionObjName());
+		SecureObject obj = getObject (objName);
 		SecurityLevel objLabel = _rm.getObjectLabel(obj);
 
+		System.out.println(subjName + " reads " + objName);
 		if (objLabel.compareTo(subjLabel) <= 0 ) {
-			// System.out.println();
-
 			ObjectManager objMng = new ObjectManager(obj);
-			System.out.println(objMng.object.getName());
+			// System.out.println(objMng.object.getName());
 
 			int value = objMng.readObj();
 			subj.updateTemp(value);
 			return value;
+		}
+		else {
+			subj.updateTemp(0);
 		}
 		
 		return 0;		

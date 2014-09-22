@@ -40,7 +40,7 @@ public class SecureSystem {
 			String fileLine = insBuffer.readLine();
 			while (fileLine != null) {
 				Instruction newInstruction = Instruction.parseInstruction(fileLine);
-				System.out.println("fileline: " + fileLine);
+				// System.out.println("fileline: " + fileLine);
 				String objName = newInstruction.getInstructionObjName();
 				String subjName = newInstruction.getInstructionSubjName();
 
